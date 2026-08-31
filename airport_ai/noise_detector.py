@@ -1596,7 +1596,10 @@ class AirportNoiseSystem:
             fl, lt, sm, fp, cn = self._classify_ensemble(audio_path)
             used = "Ensemble (EfficientNet + BEATs)"
         elif model_pref == "auto":
-            if self.eff_model is not None:
+            if self.beats_model is not None:
+                fl, lt, sm, fp, cn = self._classify_beats(audio_path)
+                used = "BEATs (iter3)"
+            elif self.eff_model is not None:
                 fl, lt, sm, fp, cn = self._classify_efficientnet(audio_path)
                 used = "EfficientNet-B0"
             elif self.cnn_model is not None:
@@ -1774,7 +1777,9 @@ class AirportNoiseSystem:
             elif model_pref == "ensemble" and self.ensemble_model is not None:
                 label, probs = self._infer_ensemble_chunk(chunk)
             elif model_pref == "auto":
-                if self.eff_model is not None:
+                if self.beats_model is not None:
+                    label, probs = self._infer_beats_chunk(chunk)
+                elif self.eff_model is not None:
                     label, probs = self._infer_efficientnet_chunk(chunk)
                 elif self.cnn_model is not None:
                     label, probs = self._infer_cnn_chunk(chunk)
@@ -1879,7 +1884,7 @@ class AirportNoiseSystem:
         Returns: dict — tüm sonuçları içeren rapor
         """
         print("\n" + "=" * 60)
-        print("  HAVALIMANL GÜRÜLTÜ ANALİZ SİSTEMİ BAŞLADI")
+        print("  HAVALIMANI GÜRÜLTÜ ANALİZ SİSTEMİ BAŞLADI")
         if self.eff_model is not None:
             print("  Sınıflandırma modu: ML (EfficientNet-B0)")
         elif self.cnn_model is not None:
@@ -1905,7 +1910,10 @@ class AirportNoiseSystem:
 
         # Adım 3: Sınıflandırma
         print("\n[ADIM 3] Gürültü kaynakları sınıflandırılıyor...")
-        if self.eff_model is not None:
+        if self.beats_model is not None:
+            frame_labels, label_times, cls_summary, _, _ = self._classify_beats(audio_path)
+            clf_mode = "ML (BEATs)"
+        elif self.eff_model is not None:
             frame_labels, label_times, cls_summary, _, _ = self._classify_efficientnet(audio_path)
             clf_mode = "ML (EfficientNet-B0)"
         elif self.cnn_model is not None:

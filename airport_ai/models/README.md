@@ -1,7 +1,7 @@
 # Model files (not committed)
 
-Pretrained model weights are deliberately excluded from Git because they are
-large and may have separate redistribution terms.
+Pretrained model weights are excluded from Git because they are large and may
+have separate redistribution terms.
 
 For the current Airport AI integration, copy the locally available artifacts
 into this directory before running analysis:

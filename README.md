@@ -41,8 +41,10 @@ npm ci
 
 ## Yerel yapılandırma ve çalıştırma
 
-AES anahtarı hiçbir zaman Git'e eklenmez. Yerel başlangıç şablonunu kopyalayın,
-`AES_KEY_B64` ve `EDGE_BASE_URL` değerlerini kendi ortamınıza göre düzenleyin:
+Bu test deposu, kolay kurulum için yerel başlatma dosyasını da içerir. Anahtar
+değeri yalnız test içindir; depo **özel (private)** tutulmalı ve bu anahtar
+üretim ortamında kullanılmamalıdır. Gerekirse şablondan yeni bir yerel dosya da
+oluşturabilirsiniz:
 
 ```powershell
 Copy-Item .\scripts\start_backend_keyed.example.ps1 .\start_backend_keyed.local.ps1
@@ -58,9 +60,9 @@ npm run dev
 
 ## AI modelleri
 
-Model ağırlıkları ve eğitim verileri GitHub'a dahil edilmez. Kullanacağınız
-model dosyalarını `airport_ai/models/` klasörüne yerleştirin; beklenen dosyalar
-için [model klasörü notlarına](airport_ai/models/README.md) bakın.
+Model ağırlıkları bu depoya eklenmez. Kullanacağınız model dosyalarını
+`airport_ai/models/` klasörüne yerleştirin; beklenen dosyalar için
+[model klasörü notlarına](airport_ai/models/README.md) bakın.
 
 Mevcut model dosyaları eski altı sınıflı taksonomiyi kullanır:
 
@@ -81,6 +83,8 @@ aktarmaktır. Böylece özel SVL ses decoder'ı devreden çıkar.
 
 ## Git politikası
 
-Depoya kayıt, `.enc` dosyası, SQLite veritabanı, AES anahtarı, yerel `.local`
-başlatma dosyası veya model ağırlığı eklenmez. Bunlar `.gitignore` ile dışarıda
-tutulur.
+Test kurulumu için yerel başlatma dosyası bilinçli olarak depoya eklenmiştir;
+bu nedenle depo private kalmalıdır. Model ağırlıkları, kayıtlar, `.enc`
+dosyaları, SQLite veritabanı, analiz çıktıları, `.venv` ve `node_modules`
+eklenmez. Bağımlılıklar `requirements-unified.txt` ve `npm ci` ile yeniden
+kurulur; model dosyaları ise yerel olarak `airport_ai/models/` içine konur.
